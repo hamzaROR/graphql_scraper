@@ -1,0 +1,7 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: graphql_scraper_development
+  pool: 5
+  username: kratos
+  password:
