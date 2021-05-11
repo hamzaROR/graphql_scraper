@@ -11,9 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20210510195235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "properties", force: :cascade do |t|
+    t.string   "name"
+    t.string   "website_url"
+    t.string   "address"
+    t.string   "amenities_url"
+    t.string   "floor_plan_url"
+    t.string   "gallery_url"
+    t.string   "contact_us_url"
+    t.string   "neighborhood_url"
+    t.string   "features_url"
+    t.string   "facebook_url"
+    t.string   "instagram_url"
+    t.string   "text_color"
+    t.string   "button_background_color"
+    t.json     "hours"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
 
 end

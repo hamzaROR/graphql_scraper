@@ -5,7 +5,8 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.11.1'
 # Use sqlite3 as the database for Active Record
 gem 'pg', '~> 0.18'
-gem 'graphql'
+gem 'graphql', '~> 1.9.5'
+gem 'faker'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
