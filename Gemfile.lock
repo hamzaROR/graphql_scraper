@@ -164,6 +164,7 @@ DEPENDENCIES
   graphql (~> 1.9.5)
   jbuilder (~> 2.0)
   jquery-rails
+  nokogiri (~> 1.11, >= 1.11.3)
   pg (~> 0.18)
   rails (= 4.2.11.1)
   sass-rails (~> 5.0)
