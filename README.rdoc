@@ -1,41 +1,40 @@
 == Project: Build a data scraper to get data from property website
 
+Sample Querry Graphql:
 
-= Sample Querry Graphql
+    {
+      properties(name: "Exo Apartments"){
+        name    
+        websiteUrl
+        address
+        time
+      } 
+    }
 
-{
-  properties(name: "Exo Apartments"){
-    name    
-    websiteUrl
-    address
-    time
-  }
-}
+    {
+      properties(name: "Carraway"){
+        name    
+        websiteUrl
+        address
+        time
+      } 
+    }
 
-{
-  properties(name: "Carraway"){
-    name    
-    websiteUrl
-    address
-    time
-  }
-}
+Sample Mutation Graphql:   
 
+    mutation {
+      scrapeProperty (
+        name: "exo reston"
+      ) {
+         name    
+      }
+    }
 
-= Sample Mutation Graphql
+    mutation {
+      scrapeProperty (
+        name: "livecarraway"
+      ) {
+         name    
+      }
+    }
 
-mutation {
-  scrapeProperty (
-    name: "exo reston"
-  ) {
-	    name    
-  }
-}
-
-mutation {
-  scrapeProperty (
-    name: "livecarraway"
-  ) {
-	    name    
-  }
-}
