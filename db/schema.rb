@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20210510195235) do
     t.string   "text_color"
     t.string   "button_background_color"
     t.json     "hours"
+    t.string   "time"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end

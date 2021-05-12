@@ -13,6 +13,7 @@ module Types
     field :facebook_url, String, null: true
     field :instagram_url, String, null: true
     field :text_color, String, null: true
+    field :time, String, null: true
     field :button_background_color, String, null: true
     field :hours, GraphQL::Types::JSON, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false

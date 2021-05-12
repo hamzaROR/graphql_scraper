@@ -15,6 +15,7 @@ class CreateProperties < ActiveRecord::Migration
       t.string :text_color
       t.string :button_background_color
       t.json :hours
+      t.string :time
 
       t.timestamps null: false
     end
