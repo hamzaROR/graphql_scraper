@@ -54,17 +54,17 @@ class PropertyClass
 
 		links.each do |link|
 			if link['href'].present?
-				if link['href'].include? '.com/gallery/'
+				if link['href'].include? 'gallery'
 					gallery_url = link['href']
-				elsif link['href'].include? '.com/contact/'
+				elsif link['href'].include? 'contact'
 					contact_url = link['href']
-				elsif link['href'].include? 'facebook.com'
+				elsif link['href'].include? 'facebook'
 					facebook_url = link['href']
-				elsif link['href'].include? 'instagram.com'
+				elsif link['href'].include? 'instagram'
 					instagram_url = link['href']
 				elsif link['href'].include? 'amenities'
 					amenities_url = link['href']
-				elsif link['href'].include? 'floor-plans'
+				elsif link['href'].include? 'floor'
 					floor_plans_url = link['href']
 				elsif link['href'].include? 'neighborhood'
 					neighborhood_url = link['href']

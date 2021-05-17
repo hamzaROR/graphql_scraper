@@ -1,14 +1,19 @@
 module Types
   class QueryType < Types::BaseObject
 
-    field :properties, PropertyType, null: true do
+    field :properties, [Types::PropertyType], null: false do
       description "Returns list of properties"
       argument :name, String, required: true
+      argument :limit, Integer, required: true
+      argument :offset, Integer, required: true
     end
 
-    def properties(name:)
-      Property.find_by(name: name)
+    def properties(**args)
+		Property.where('name ILIKE ?', '%' + args[:name] + '%').limit(args[:limit]).offset(args[:offset])				
     end
 
   end
 end
+
+
+

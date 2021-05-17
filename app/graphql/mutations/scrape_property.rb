@@ -5,9 +5,12 @@ module Mutations
     type Types::PropertyType
 
     def resolve(name: nil)
-      PropertyClass.new(name)
-      # Property.find_by(name: name)
-      Property.last
+		begin
+			PropertyClass.new(name)
+			Property.find_by(name: property_name)
+		rescue Exception
+			raise
+		end
     end
   end
 end

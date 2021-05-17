@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'pry'
 gem 'rails', '4.2.11.1'
 gem 'pg', '~> 0.18'
 gem 'graphql', '~> 1.9.5'
