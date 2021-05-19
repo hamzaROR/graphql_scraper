@@ -2,39 +2,38 @@
 
 Sample Querry Graphql:
 
-    {
-      properties(name: "Exo Apartments"){
-        name    
-        websiteUrl
-        address
-        time
-      } 
-    }
 
     {
-      properties(name: "Carraway"){
+      properties(name: "a",limit:5 ,offset:0){
         name    
         websiteUrl
         address
         time
-      } 
+      }
     }
 
 Sample Mutation Graphql:   
 
-    mutation {
-      scrapeProperty (
-        name: "exo reston"
-      ) {
-         name    
-      }
-    }
 
     mutation {
       scrapeProperty (
-        name: "livecarraway"
+        name: "West Mockingbird dallas"
       ) {
-         name    
+          name    
+          websiteUrl
+          address
+          time
+          amenitiesUrl
+          floorPlanUrl
+          galleryUrl
+          contactUsUrl
+          neighborhoodUrl
+          featuresUrl
+          facebookUrl
+          instagramUrl
+          otherLinks
+          textColor
+          buttonBackgroundColor
       }
     }
 

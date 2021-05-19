@@ -6,36 +6,14 @@ class PropertyClass
 
 	def initialize(name)
 		@name = name
+		@return_back = {success:false, msg: "Unable to scrape property"} 
 	end
 
-	def call
-		return_back = {success:false, msg: "Unable to scrape property"}
-
-		array_names =  @name.split(" ")
-		@name.rpartition(' ').first.present? ? array_names.unshift(@name.rpartition(' ').first).uniq! : nil
-		array_names.unshift(@name).uniq!
-		query_names = array_names
-
-		array_names.reverse.each do |old_name|
-			query_names.unshift(old_name.delete(' ')).uniq!
-		end
-
-		array_names.reverse.each do |old_name|
-			query_names.unshift(old_name + ' apartments').uniq!
-		end
-		array_names = query_names
-	
-		puts "array_namesarray_namesarray_namesarray_names"
-		puts array_names
-		puts "array_namesarray_namesarray_namesarray_names"
-
+	def call		
+		array_names = get_all_names_to_query(@name)
 		array_names.each do |single_name|
 			google_search = Nokogiri::HTML.parse(open("https://www.google.com/search?q=#{single_name}&gl=us&hl=en&pws=0"))
-
-			property_name = nil
-			website_url = nil
-			property_address = nil
-			property_time = nil
+			property_name, website_url, property_address, property_time = [nil] * 4
 			if google_search.css('.deIvCb').present? && google_search.css('.VGHMXd').present? && google_search.css('.tAd8D').present?
 				property_name = google_search.css('.deIvCb')[0].inner_html
 				website_url = google_search.css('.VGHMXd').last['href']
@@ -43,105 +21,39 @@ class PropertyClass
 				website_url = website_url.partition('?q=').last
 				website_url.gsub!('http://www.','https://')
 				property_address = google_search.css('.tAd8D')[1].inner_html
-				# property_time = google_search.css('.tAd8D')[2].inner_html
-				property_time = "Wednesday | 9AM–6PM | Thursday | 9AM–6PM | Friday | 9AM–6PM | Saturday | 10AM–5PM | Sunday | 1–5PM | Monday | 9AM–6PM | Tuesday | 9AM–6PM"
+				property_time = google_search.css('.tAd8D')[2].inner_html
 			end
-
-			puts "single_namesingle_namesingle_namesingle_name"
-			puts single_name
-			puts "property_timeproperty_timeproperty_timeprope"
-			puts property_time
-			puts "website_urlwebsite_urlwebsite_urlwebsite_url"
-			puts website_url
-			puts "property_addressproperty_addressproperty_add"
-			puts property_address
-			puts "property_nameproperty_nameproperty_nameprope"
-			puts property_name
-			puts "property_nameproperty_nameproperty_nameprope"
-
-
-
 
 			property = Property.find_by(name: property_name)
 			unless property.present?
 				if property_time.present? && website_url.present? && property_address.present?
 					site_prase_search = Nokogiri::HTML.parse(open(website_url))		
 					links = site_prase_search.css('a')
-					gallery_url = nil
-					instagram_url = nil
-					facebook_url = nil
-					contact_url = nil
-					amenities_url = nil
-					floor_plans_url = nil
-					neighborhood_url = nil
-					features_url = nil
-					text_color = nil
-					button_background_color = nil
+					gallery_url, instagram_url, facebook_url, contact_url, amenities_url, floor_plans_url, neighborhood_url, features_url, text_color , button_background_color = [nil] * 10
 					other_links = ""
-
 					links.each do |link|
 						if link['href'].present?
 							if link['href'].include? 'gallery'
-								if link['href'][0] == "/"
-									gallery_url = website_url + link['href']
-								else
-									gallery_url = link['href']
-								end
+								gallery_url = get_link(link['href'],website_url)
 							elsif link['href'].include? 'contact'
-								if link['href'][0] == "/"
-									contact_url = website_url + link['href']
-								else
-									contact_url = link['href']
-								end
+								contact_url = get_link(link['href'],website_url)
 							elsif link['href'].include? 'facebook'
-								if link['href'][0] == "/"
-									facebook_url = website_url + link['href']
-								else
-									facebook_url = link['href']
-								end
+								facebook_url = get_link(link['href'],website_url)
 							elsif link['href'].include? 'instagram'
-								if link['href'][0] == "/"
-									instagram_url = website_url + link['href']
-								else
-									instagram_url = link['href']
-								end
+								instagram_url = get_link(link['href'],website_url)
 							elsif link['href'].include? 'amenities'
-								if link['href'][0] == "/"
-									amenities_url = website_url + link['href']
-								else
-									amenities_url = link['href']
-								end
+								amenities_url = get_link(link['href'],website_url)
 							elsif link['href'].include? 'floor'
-								if link['href'][0] == "/"
-									floor_plans_url = website_url + link['href']
-								else
-									floor_plans_url = link['href']
-								end
+								floor_plans_url = get_link(link['href'],website_url)
 							elsif link['href'].include? 'neighborhood'
-								if link['href'][0] == "/"
-									neighborhood_url = website_url + link['href']
-								else
-									neighborhood_url = link['href']
-								end
+								neighborhood_url = get_link(link['href'],website_url)
 							elsif link['href'].include? 'features'
-								if link['href'][0] == "/"
-									features_url = website_url + link['href']
-								else
-									features_url = link['href']
-								end
+								features_url = get_link(link['href'],website_url)
 							else
-								if link['href'][0] == "/" || link['href'][0..4] == "https"
-									if link['href'][0] == "/"
-										other_links = other_links + ', ' + (website_url + link['href'])
-									else
-										other_links = other_links + ', ' + link['href']
-									end
-								end
-
+								other_links = get_other_link(link['href'],website_url,other_links)
 							end
 						end
 					end
-
 
 					property = Property.create(
 						name: property_name,
@@ -160,12 +72,52 @@ class PropertyClass
 						text_color: text_color,
 						button_background_color: button_background_color
 					)
-					return_back = {success:true, msg: "Property alredy in system", property: property}
-					return return_back
+					@return_back = {success:true, property: property}
+					return @return_back
 				end
 			end
 		end
-		return return_back
+		return @return_back
+	end
+
+
+	def get_all_names_to_query(name)
+		query_names =  name.split(" ")
+		name.rpartition(' ').first.present? ? query_names.unshift(name.rpartition(' ').first).uniq! : nil
+		query_names.unshift(name).uniq!
+		array_names = query_names
+		query_names.reverse.each do |old_name|
+			array_names.unshift(old_name.delete(' ')).uniq!
+			array_names.unshift(old_name + ' apartments').uniq!
+		end
+		array_names
+	end
+
+	def get_link(link,website_url)
+		url = link
+		url = website_url + link if link[0] == "/"
+		url
+	end
+
+	def get_other_link(link,website_url,other_links)
+		if link[0] == "/" || link[0..4] == "https" 
+			if link[0] == "/"
+				url = (website_url + link)
+				unless other_links.include? url
+					if url.include? website_url
+						other_links = other_links + ', ' + url
+					end
+				end
+			else
+				url = link
+				unless other_links.include? url
+					if url.include? website_url
+						other_links = other_links + ', ' + url
+					end
+				end
+			end
+		end								
+		other_links
 	end
 
 end
