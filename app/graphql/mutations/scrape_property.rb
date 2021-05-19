@@ -6,11 +6,15 @@ module Mutations
 
     def resolve(name: nil)
 		begin
-			PropertyClass.new(name)
-			Property.find_by(name: property_name)
-		rescue Exception
-			raise
-		end
+			scrapper_call = PropertyClass.new(name).call
+			if scrapper_call[:success]
+				property = scrapper_call[:property]
+			else
+   		      GraphQL::ExecutionError.new(scrapper_call[:msg])
+			end
+	    rescue Exception => e
+	      GraphQL::ExecutionError.new("Error: #{e.message}")
+	    end			
     end
   end
 end

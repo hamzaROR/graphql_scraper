@@ -16,6 +16,7 @@ module Types
     field :time, String, null: true
     field :button_background_color, String, null: true
     field :hours, GraphQL::Types::JSON, null: true
+    field :other_links, String, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
